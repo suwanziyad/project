@@ -1,0 +1,103 @@
+﻿setSize(500, 400);
+
+
+const PIPE_WIDTH = 25;
+
+
+let time = 0;
+let dx = 2;
+let dy = 0;
+let pipe1;
+let pipe2;
+let pipe3;
+let pipe4;
+let pipe5;
+let pipe6;
+let flappy;
+let pipeColor;
+let arr = [" red", " green", " blue "]
+
+
+function main() {
+    pipeColor = readLine("Choose one of these colors for the obstacles:" + arr)
+    initGame(pipeColor);
+    setTimer(movement, 25);
+    keyDownMethod(fly);
+}
+
+
+function initGame(color) {
+    pipe1 = new Rectangle(PIPE_WIDTH, 150);
+    pipe1.setPosition(125, 0);
+    pipe1.setColor(color);
+    add(pipe1);
+    pipe2 = new Rectangle(PIPE_WIDTH, 150);
+    pipe2.setPosition(125, getHeight()-150);
+    pipe2.setColor(color);
+    add(pipe2);
+    pipe3 = new Rectangle(PIPE_WIDTH, 250);
+    pipe3.setPosition(250, 0);
+    pipe3.setColor(color);
+    add(pipe3);
+    pipe4 = new Rectangle(PIPE_WIDTH, 50);
+    pipe4.setPosition(250, getHeight()-50);
+    pipe4.setColor(color);
+    add(pipe4);
+    pipe5 = new Rectangle(PIPE_WIDTH, 100);
+    pipe5.setPosition(375, 0);
+    pipe5.setColor(color);
+    add(pipe5);
+    pipe6 = new Rectangle(PIPE_WIDTH, 200);
+    pipe6.setPosition(375, getHeight()-200);
+    pipe6.setColor(color);
+    add(pipe6);
+    
+    flappy = new Circle(20);
+    flappy.setPosition(25, getHeight()/2);
+    flappy.setColor("yellow");
+    add(flappy);
+    let txt = new Text("Arrow up to jump", "10pt Arial");
+    txt.setPosition(0, 10);
+    add(txt);
+}
+
+
+function movement() {
+    
+    let elem = getElementAt(flappy.getX() + 20, flappy.getY());
+    if(elem != null) {
+        gameOver();
+    }
+    flappy.move(dx, dy);
+    if (flappy.getX() >= getWidth()) {
+        flappy.setPosition(25, getHeight()/2);
+    }
+        flappy.move(dx, dy);
+    dy = dy + 0.25;
+    time++;
+    if (time >= 500) {
+        gameOver();
+    }
+}
+
+
+function fly(e) {
+    if (e.key == "ArrowUp") {
+        let getX = flappy.getX();
+        let getY = flappy.getY();
+        dy = 0; 
+        flappy.setPosition(getX, getY-getHeight()/12)
+    }
+}
+
+
+function gameOver() {
+    stopTimer(movement);
+    remove(flappy);
+    let txt = new Text("Game over, your score was " + time + "/500", "11.5pt Arial");
+    txt.setPosition(0, getHeight()/2);
+    add(txt);
+}
+
+
+main();
